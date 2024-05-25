@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: 'postgres:latest'
+    command: postgres -c 'max_connections=1500'
+    restart: always
+    environment:
+      POSTGRES_DB: 'manuel_bookstore'
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_USER: 'postgres'
+    volumes:
+      - pgdata_main:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  pgdata_main:
+
+
