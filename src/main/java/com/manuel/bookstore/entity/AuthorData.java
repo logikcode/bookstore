@@ -1,15 +1,20 @@
 package com.manuel.bookstore.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
-@Table(name = "book_author", indexes = {
+@MappedSuperclass
+@Table(name = "author", indexes = {
         @Index(name = "idx_author_name", columnList = "name")
 })
-public class BookAuthorData {
+public class AuthorData extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,9 +27,9 @@ public class BookAuthorData {
     @OneToMany(mappedBy = "author")
     private Set<BookData> books;
 
-    public BookAuthorData() {}
+    public AuthorData() {}
 
-    public BookAuthorData(String name, String biography, LocalDate birthdate, String nationality) {
+    public AuthorData(String name, String biography, LocalDate birthdate, String nationality) {
         this.name = name;
         this.biography = biography;
         this.birthdate = birthdate;

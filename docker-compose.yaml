@@ -10,11 +10,11 @@ services:
       POSTGRES_PASSWORD: 'password'
       POSTGRES_USER: 'postgres'
     volumes:
-      - pgdata_main:/var/lib/postgresql/data
+      - pgdata_bookstore:/var/lib/postgresql/data
     ports:
       - '5432:5432'
 
 volumes:
-  pgdata_main:
+  pgdata_bookstore:
 
 

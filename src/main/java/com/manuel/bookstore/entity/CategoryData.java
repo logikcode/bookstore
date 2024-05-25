@@ -1,12 +1,19 @@
 package com.manuel.bookstore.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Set;
 
+@Getter
+@Setter
+@ToString
 @Entity
-@Table(name = "book_category")
-public class BookCategoryData {
+@MappedSuperclass
+@Table(name = "category")
+public class CategoryData extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +25,9 @@ public class BookCategoryData {
     @OneToMany(mappedBy = "category")
     private Set<BookData> books;
 
-    public BookCategoryData() {}
+    public CategoryData() {}
 
-    public BookCategoryData(String name, String description) {
+    public CategoryData(String name, String description) {
         this.name = name;
         this.description = description;
     }

@@ -1,11 +1,16 @@
 package com.manuel.bookstore.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
+@MappedSuperclass
 @Table(name = "books", indexes = {
         @Index(name = "idx_book_title", columnList = "title"),
         @Index(name = "idx_book_isbn", columnList = "isbn"),
@@ -13,14 +18,10 @@ import java.time.LocalDate;
         @Index(name = "idx_book_publisher_id", columnList = "publisher_id"),
         @Index(name = "idx_book_category_id", columnList = "category_id")
 })
-public class BookData {
-
-
-
+public class BookData extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
     private String isbn;
     private BigDecimal price;
@@ -30,19 +31,20 @@ public class BookData {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    private BookAuthorData author;
+    private AuthorData author;
 
     @ManyToOne
     @JoinColumn(name = "publisher_id")
-    private BookPublisherData publisher;
+    private PublisherData publisher;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private BookCategoryData category;
+    private CategoryData category;
 
-    public BookData() {}
+    public BookData() {
+    }
 
-    public BookData(String title, String isbn, BigDecimal price, LocalDate publicationDate, String description, String availabilityStatus, BookAuthorData author, BookPublisherData publisher, BookCategoryData category) {
+    public BookData(String title, String isbn, BigDecimal price, LocalDate publicationDate, String description, String availabilityStatus, AuthorData author, PublisherData publisher, CategoryData category) {
         this.title = title;
         this.isbn = isbn;
         this.price = price;

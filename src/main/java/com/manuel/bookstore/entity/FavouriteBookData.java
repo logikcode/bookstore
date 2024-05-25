@@ -2,21 +2,16 @@ package com.manuel.bookstore.entity;
 
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "book_order")
-public class OrderData {
+@MappedSuperclass
+@Table(name = "favourite_book")
+public class FavouriteBookData extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private LocalDate orderDate;
-    private String status;
-    private BigDecimal totalAmount;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -30,12 +25,10 @@ public class OrderData {
     )
     private Set<BookData> books;
 
-    public OrderData() {}
+    public FavouriteBookData() {
+    }
 
-    public OrderData(LocalDate orderDate, String status, BigDecimal totalAmount, StoreUserData user) {
-        this.orderDate = orderDate;
-        this.status = status;
-        this.totalAmount = totalAmount;
+    public FavouriteBookData(StoreUserData user) {
         this.user = user;
     }
 }
