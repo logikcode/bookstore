@@ -16,15 +16,10 @@ public class BaseEntity {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
-
     private LocalDate createdDate;
-
+    private LocalDate updatedDate;
     @Column(nullable = false)
     private String createdBy;
-
-    private LocalDate updatedDate;
-
     private String updatedBy;
 
 }

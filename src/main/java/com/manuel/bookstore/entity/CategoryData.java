@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -18,6 +19,7 @@ public class CategoryData extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private UUID publicId;
     private String name;
     private String description;
 

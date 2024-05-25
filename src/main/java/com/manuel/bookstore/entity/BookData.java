@@ -1,11 +1,13 @@
 package com.manuel.bookstore.entity;
 
+import com.manuel.bookstore.enumeration.BookStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -22,12 +24,21 @@ public class BookData extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private UUID publicId;
+
     private String title;
+
     private String isbn;
+
     private BigDecimal price;
+
     private LocalDate publicationDate;
+
     private String description;
-    private String availabilityStatus;
+
+    @Enumerated(value = EnumType.STRING)
+    private BookStatus availabilityStatus;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -44,7 +55,7 @@ public class BookData extends BaseEntity{
     public BookData() {
     }
 
-    public BookData(String title, String isbn, BigDecimal price, LocalDate publicationDate, String description, String availabilityStatus, AuthorData author, PublisherData publisher, CategoryData category) {
+    public BookData(String title, String isbn, BigDecimal price, LocalDate publicationDate, String description, BookStatus availabilityStatus, AuthorData author, PublisherData publisher, CategoryData category) {
         this.title = title;
         this.isbn = isbn;
         this.price = price;

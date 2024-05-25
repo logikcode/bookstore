@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS authors
 (
     id           BIGSERIAL PRIMARY KEY,
+    publicId       uuid not null,
     status       VARCHAR(255),
     created_date DATE,
     created_by   VARCHAR(255) NOT NULL,
@@ -18,7 +19,8 @@ CREATE TABLE IF NOT EXISTS authors
 CREATE TABLE IF NOT EXISTS publishers
 (
     id             BIGSERIAL PRIMARY KEY,
-    status         VARCHAR(255),
+    publicId       uuid not null,
+    publisherStatus VARCHAR(50),
     created_date   DATE,
     created_by     VARCHAR(255) NOT NULL,
     updated_date   DATE,
@@ -33,6 +35,7 @@ CREATE TABLE IF NOT EXISTS publishers
 CREATE TABLE IF NOT EXISTS categories
 (
     id           BIGSERIAL PRIMARY KEY,
+    publicId       uuid not null,
     status       VARCHAR(255),
     created_date DATE,
     created_by   VARCHAR(255) NOT NULL,
@@ -47,6 +50,7 @@ CREATE TABLE IF NOT EXISTS categories
 CREATE TABLE IF NOT EXISTS books
 (
     id                  BIGSERIAL PRIMARY KEY,
+    publicId       uuid not null,
     status              VARCHAR(255),
     created_date        DATE,
     created_by          VARCHAR(255) NOT NULL,
@@ -81,7 +85,8 @@ CREATE TABLE IF NOT EXISTS book_authors
 CREATE TABLE IF NOT EXISTS store_users
 (
     id                BIGSERIAL PRIMARY KEY,
-    status            VARCHAR(255),
+    publicId       uuid not null,
+    status            VARCHAR(50),
     created_date      DATE,
     created_by        VARCHAR(255) NOT NULL,
     updated_date      DATE,
@@ -97,7 +102,7 @@ CREATE TABLE IF NOT EXISTS store_users
 CREATE TABLE IF NOT EXISTS favourite_books
 (
     id           BIGSERIAL PRIMARY KEY,
-    status       VARCHAR(255),
+    publicId       uuid not null,
     created_date DATE,
     created_by   VARCHAR(255) NOT NULL,
     updated_date DATE,
@@ -120,15 +125,16 @@ CREATE TABLE IF NOT EXISTS user_favourite_books
 CREATE TABLE IF NOT EXISTS orders
 (
     id BIGSERIAL PRIMARY KEY,
-    status VARCHAR(255),
+    publicId       uuid not null,
+    status VARCHAR(50),
+    total_amount DECIMAL(10, 2) NOT NULL,
     created_date DATE,
     created_by VARCHAR(255) NOT NULL,
     updated_date DATE,
     updated_by VARCHAR(255),
     order_date DATE NOT NULL,
-    total_amount DECIMAL(10, 2) NOT NULL,
-    customer_id BIGINT,
-    FOREIGN KEY (customer_id) REFERENCES store_users(id)
+    user_id BIGINT,
+    FOREIGN KEY (user_id) REFERENCES store_users(id)
 );
 
 -- Create Book_Order Table if not exists
@@ -139,5 +145,23 @@ CREATE TABLE IF NOT EXISTS book_order
     PRIMARY KEY (book_id, order_id),
     CONSTRAINT fk_book_order_book_id FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE,
     CONSTRAINT fk_book_order_order_id FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE
+);
+
+-- Create Review Table if not exists
+CREATE TABLE IF NOT EXISTS reviews
+(
+    id BIGSERIAL PRIMARY KEY,
+    public_id UUID,
+    rating INT,
+    comment TEXT,
+    review_date DATE,
+    created_date DATE,
+    created_by VARCHAR(255) NOT NULL,
+    updated_date DATE,
+    updated_by VARCHAR(255),
+    book_id BIGINT,
+    user_id BIGINT,
+    CONSTRAINT fk_review_book_id FOREIGN KEY (book_id) REFERENCES books (id),
+    CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES store_users (id)
 );
 
