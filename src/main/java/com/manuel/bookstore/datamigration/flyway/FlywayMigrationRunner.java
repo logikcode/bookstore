@@ -19,15 +19,8 @@ public class FlywayMigrationRunner {
 
     private final DataSource dataSource;
 
-    @Value("${spring.profiles.active}")
-    private String profile;
-
-
-
     @Bean(initMethod = "migrate")
     public Flyway flyway() {
-
-
 
         return Flyway.configure()
                 .dataSource(dataSource)
