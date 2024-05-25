@@ -1,4 +1,4 @@
-package com.manuel.bookstore.flyway;
+package com.manuel.bookstore.datamigration.flyway;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;

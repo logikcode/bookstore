@@ -1,5 +1,5 @@
 
- package com.manuel.bookstore.flyway;
+ package com.manuel.bookstore.datamigration.flyway;
 
 
 import lombok.RequiredArgsConstructor;
@@ -22,15 +22,12 @@ public class FlywayMigrationRunner {
     @Value("${spring.profiles.active}")
     private String profile;
 
-    public void switchDatabases() {
-        if (profile.equals("local"))
-            SwitchDatabases.run();
-    }
+
 
     @Bean(initMethod = "migrate")
     public Flyway flyway() {
 
-        switchDatabases();
+
 
         return Flyway.configure()
                 .dataSource(dataSource)
