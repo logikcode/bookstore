@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS authors
 (
     id           BIGSERIAL PRIMARY KEY,
-    publicId       uuid not null,
+    public_id       uuid NOT NULL UNIQUE,
     status       VARCHAR(255),
     created_date DATE,
     created_by   VARCHAR(255) NOT NULL,
@@ -19,13 +19,13 @@ CREATE TABLE IF NOT EXISTS authors
 CREATE TABLE IF NOT EXISTS publishers
 (
     id             BIGSERIAL PRIMARY KEY,
-    publicId       uuid not null,
+    public_id       uuid NOT NULL UNIQUE,
     publisherStatus VARCHAR(50),
     created_date   DATE,
     created_by     VARCHAR(255) NOT NULL,
     updated_date   DATE,
     updated_by     VARCHAR(255),
-    name           VARCHAR(255) NOT NULL,
+    name           VARCHAR(255) NOT NULL UNIQUE,
     address        VARCHAR(255),
     contact_number VARCHAR(20),
     CONSTRAINT idx_publisher_name UNIQUE (name)
@@ -35,13 +35,13 @@ CREATE TABLE IF NOT EXISTS publishers
 CREATE TABLE IF NOT EXISTS categories
 (
     id           BIGSERIAL PRIMARY KEY,
-    publicId       uuid not null,
+    public_id       uuid NOT NULL UNIQUE,
     status       VARCHAR(255),
     created_date DATE,
     created_by   VARCHAR(255) NOT NULL,
     updated_date DATE,
     updated_by   VARCHAR(255),
-    name         VARCHAR(255) NOT NULL,
+    name         VARCHAR(255) NOT NULL UNIQUE,
     description  TEXT,
     CONSTRAINT idx_category_name UNIQUE (name)
 );
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS categories
 CREATE TABLE IF NOT EXISTS books
 (
     id                  BIGSERIAL PRIMARY KEY,
-    publicId       uuid not null,
+    public_id       uuid NOT NULL,
     status              VARCHAR(255),
     created_date        DATE,
     created_by          VARCHAR(255) NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS book_authors
 CREATE TABLE IF NOT EXISTS store_users
 (
     id                BIGSERIAL PRIMARY KEY,
-    publicId       uuid not null,
+    public_id       uuid NOT NULL,
     status            VARCHAR(50),
     created_date      DATE,
     created_by        VARCHAR(255) NOT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS store_users
 CREATE TABLE IF NOT EXISTS favourite_books
 (
     id           BIGSERIAL PRIMARY KEY,
-    publicId       uuid not null,
+    public_id       uuid NOT NULL,
     created_date DATE,
     created_by   VARCHAR(255) NOT NULL,
     updated_date DATE,
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS user_favourite_books
 CREATE TABLE IF NOT EXISTS orders
 (
     id BIGSERIAL PRIMARY KEY,
-    publicId       uuid not null,
+    public_id       uuid NOT NULL,
     status VARCHAR(50),
     total_amount DECIMAL(10, 2) NOT NULL,
     created_date DATE,
