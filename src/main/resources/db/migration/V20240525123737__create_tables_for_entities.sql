@@ -1,16 +1,16 @@
 -- Create Author Table if not exists
 CREATE TABLE IF NOT EXISTS authors
 (
-    id          BIGSERIAL PRIMARY KEY,
-    status      VARCHAR(255),
+    id           BIGSERIAL PRIMARY KEY,
+    status       VARCHAR(255),
     created_date DATE,
-    created_by  VARCHAR(255) NOT NULL,
+    created_by   VARCHAR(255) NOT NULL,
     updated_date DATE,
-    updated_by  VARCHAR(255),
-    name        VARCHAR(255) NOT NULL,
-    biography   TEXT,
-    birthdate   DATE,
-    nationality VARCHAR(100),
+    updated_by   VARCHAR(255),
+    name         VARCHAR(255) NOT NULL,
+    biography    TEXT,
+    birthdate    DATE,
+    nationality  VARCHAR(100),
     CONSTRAINT idx_author_name UNIQUE (name)
 );
 
@@ -32,14 +32,14 @@ CREATE TABLE IF NOT EXISTS publishers
 -- Create Category Table if not exists
 CREATE TABLE IF NOT EXISTS categories
 (
-    id          BIGSERIAL PRIMARY KEY,
-    status      VARCHAR(255),
+    id           BIGSERIAL PRIMARY KEY,
+    status       VARCHAR(255),
     created_date DATE,
     created_by   VARCHAR(255) NOT NULL,
     updated_date DATE,
     updated_by   VARCHAR(255),
-    name        VARCHAR(255) NOT NULL,
-    description TEXT,
+    name         VARCHAR(255) NOT NULL,
+    description  TEXT,
     CONSTRAINT idx_category_name UNIQUE (name)
 );
 
@@ -96,13 +96,13 @@ CREATE TABLE IF NOT EXISTS store_users
 -- Create FavouriteBookData Table if not exists
 CREATE TABLE IF NOT EXISTS favourite_books
 (
-    id                  BIGSERIAL PRIMARY KEY,
-    status              VARCHAR(255),
-    created_date        DATE,
-    created_by          VARCHAR(255) NOT NULL,
-    updated_date        DATE,
-    updated_by          VARCHAR(255),
-    user_id             BIGINT,
+    id           BIGSERIAL PRIMARY KEY,
+    status       VARCHAR(255),
+    created_date DATE,
+    created_by   VARCHAR(255) NOT NULL,
+    updated_date DATE,
+    updated_by   VARCHAR(255),
+    user_id      BIGINT,
     CONSTRAINT fk_favourite_book_user_id FOREIGN KEY (user_id) REFERENCES store_users (id)
 );
 
@@ -114,5 +114,30 @@ CREATE TABLE IF NOT EXISTS user_favourite_books
     PRIMARY KEY (favourite_id, book_id),
     FOREIGN KEY (favourite_id) REFERENCES favourite_books (id),
     FOREIGN KEY (book_id) REFERENCES books (id)
+);
+
+-- Create Order Table if not exists
+CREATE TABLE IF NOT EXISTS orders
+(
+    id BIGSERIAL PRIMARY KEY,
+    status VARCHAR(255),
+    created_date DATE,
+    created_by VARCHAR(255) NOT NULL,
+    updated_date DATE,
+    updated_by VARCHAR(255),
+    order_date DATE NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    customer_id BIGINT,
+    FOREIGN KEY (customer_id) REFERENCES store_users(id)
+);
+
+-- Create Book_Order Table if not exists
+CREATE TABLE IF NOT EXISTS book_order
+(
+    book_id  BIGINT NOT NULL,
+    order_id BIGINT NOT NULL,
+    PRIMARY KEY (book_id, order_id),
+    CONSTRAINT fk_book_order_book_id FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE,
+    CONSTRAINT fk_book_order_order_id FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE
 );
 
