@@ -1,12 +1,16 @@
 package com.manuel.bookstore.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @MappedSuperclass
-@Table(name = "publisher")
+@Table(name = "publishers")
 public class PublisherData {
 
     @Id

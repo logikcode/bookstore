@@ -12,13 +12,12 @@ import java.util.Set;
 @ToString
 @Entity
 @MappedSuperclass
-@Table(name = "category")
+@Table(name = "categories")
 public class CategoryData extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private String description;
 

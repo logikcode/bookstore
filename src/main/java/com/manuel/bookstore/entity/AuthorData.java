@@ -11,7 +11,7 @@ import java.util.Set;
 @Setter
 @Entity
 @MappedSuperclass
-@Table(name = "author", indexes = {
+@Table(name = "authors", indexes = {
         @Index(name = "idx_author_name", columnList = "name")
 })
 public class AuthorData extends BaseEntity {

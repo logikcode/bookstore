@@ -1,26 +1,30 @@
 package com.manuel.bookstore.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @MappedSuperclass
 @Table(name = "favourite_book")
-public class FavouriteBookData extends BaseEntity{
+public class FavouriteBookData extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "user_id")
     private StoreUserData user;
 
     @ManyToMany
     @JoinTable(
-            name = "order_books",
-            joinColumns = @JoinColumn(name = "order_id"),
+            name = "favourite_books",
+            joinColumns = @JoinColumn(name = "favourite_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
     private Set<BookData> books;

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @ToString
 @Entity
 @MappedSuperclass
-@Table(name = "review")
+@Table(name = "reviews")
 public class ReviewData {
 
     @Id
@@ -32,10 +32,10 @@ public class ReviewData {
     private StoreUserData customer;
 
     public ReviewData(){}
-    public ReviewData(int rating, String comment, LocalDate reviewDate, BookData book, StoreUserData customer) {
+    public ReviewData(int rating, String comment, BookData book, StoreUserData customer) {
         this.rating = rating;
         this.comment = comment;
-        this.reviewDate = reviewDate;
+        this.reviewDate = LocalDate.now();
         this.book = book;
         this.customer = customer;
     }
