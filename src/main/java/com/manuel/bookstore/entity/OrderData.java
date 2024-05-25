@@ -20,7 +20,7 @@ public class OrderData {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private PlatformUserData user;
+    private StoreUserData user;
 
     @ManyToMany
     @JoinTable(
@@ -32,7 +32,7 @@ public class OrderData {
 
     public OrderData() {}
 
-    public OrderData(LocalDate orderDate, String status, BigDecimal totalAmount, PlatformUserData user) {
+    public OrderData(LocalDate orderDate, String status, BigDecimal totalAmount, StoreUserData user) {
         this.orderDate = orderDate;
         this.status = status;
         this.totalAmount = totalAmount;

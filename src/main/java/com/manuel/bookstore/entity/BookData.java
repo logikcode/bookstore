@@ -6,7 +6,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "books")
+@Table(name = "books", indexes = {
+        @Index(name = "idx_book_title", columnList = "title"),
+        @Index(name = "idx_book_isbn", columnList = "isbn"),
+        @Index(name = "idx_book_author_id", columnList = "author_id"),
+        @Index(name = "idx_book_publisher_id", columnList = "publisher_id"),
+        @Index(name = "idx_book_category_id", columnList = "category_id")
+})
 public class BookData {
 
 

@@ -2,7 +2,6 @@ package com.manuel.bookstore.entity;
 
 import jakarta.persistence.*;
 
-import java.awt.print.Book;
 import java.time.LocalDate;
 
 @Entity
@@ -23,10 +22,10 @@ public class BookReviewData {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private PlatformUserData customer;
+    private StoreUserData customer;
 
     public BookReviewData(){}
-    public BookReviewData(int rating, String comment, LocalDate reviewDate, BookData book, PlatformUserData customer) {
+    public BookReviewData(int rating, String comment, LocalDate reviewDate, BookData book, StoreUserData customer) {
         this.rating = rating;
         this.comment = comment;
         this.reviewDate = reviewDate;

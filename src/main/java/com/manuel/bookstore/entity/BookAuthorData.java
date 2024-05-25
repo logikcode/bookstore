@@ -6,7 +6,9 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "book_author")
+@Table(name = "book_author", indexes = {
+        @Index(name = "idx_author_name", columnList = "name")
+})
 public class BookAuthorData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +20,7 @@ public class BookAuthorData {
     private String nationality;
 
     @OneToMany(mappedBy = "author")
-    private Set<BookAuthorData> books;
+    private Set<BookData> books;
 
     public BookAuthorData() {}
 
