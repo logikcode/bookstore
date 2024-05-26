@@ -12,7 +12,6 @@ import java.util.UUID;
 @Setter
 @ToString
 @Entity
-@MappedSuperclass
 @Table(name = "reviews")
 public class ReviewData {
 
@@ -29,15 +28,15 @@ public class ReviewData {
     private BookData book;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private StoreUserData customer;
+    @JoinColumn(name = "user_id")
+    private StoreUserData user;
 
     public ReviewData(){}
-    public ReviewData(int rating, String comment, BookData book, StoreUserData customer) {
+    public ReviewData(int rating, String comment, BookData book, StoreUserData user) {
         this.rating = rating;
         this.comment = comment;
         this.reviewDate = LocalDate.now();
         this.book = book;
-        this.customer = customer;
+        this.user = user;
     }
 }

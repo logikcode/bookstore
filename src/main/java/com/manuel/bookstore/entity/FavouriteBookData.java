@@ -10,8 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@MappedSuperclass
-@Table(name = "favourite_book")
+@Table(name = "user_favourite_books")
 public class FavouriteBookData extends BaseEntity {
 
     @Id

@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS publishers
     id             BIGSERIAL PRIMARY KEY,
     public_id       uuid NOT NULL UNIQUE,
     publisher_status VARCHAR(50),
-    created_date   TIMESTAMP,
+    created_date   DATE,
     created_by     VARCHAR(255) NOT NULL,
-    updated_date   TIMESTAMP,
+    updated_date   DATE,
     updated_by     VARCHAR(255),
     name           VARCHAR(255) NOT NULL UNIQUE,
     address        VARCHAR(255),
@@ -37,9 +37,9 @@ CREATE TABLE IF NOT EXISTS categories
     id           BIGSERIAL PRIMARY KEY,
     public_id       uuid NOT NULL UNIQUE,
     status       VARCHAR(255),
-    created_date TIMESTAMP,
+    created_date DATE,
     created_by   VARCHAR(255) NOT NULL,
-    updated_date TIMESTAMP,
+    updated_date DATE,
     updated_by   VARCHAR(255),
     name         VARCHAR(255) NOT NULL UNIQUE,
     description  TEXT,
@@ -51,31 +51,28 @@ CREATE TABLE IF NOT EXISTS books
 (
     id                  BIGSERIAL PRIMARY KEY,
     public_id       uuid NOT NULL,
-    status              VARCHAR(255),
-    created_date        TIMESTAMP,
+    created_date        DATE,
     created_by          VARCHAR(255) NOT NULL,
-    updated_date        TIMESTAMP,
+    updated_date        DATE,
     updated_by          VARCHAR(255),
     title               VARCHAR(255) NOT NULL,
     isbn                VARCHAR(13)  NOT NULL,
     price               DECIMAL(10, 2),
-    publication_date    TIMESTAMP,
+    publication_date    DATE,
     description         TEXT,
     availability_status VARCHAR(50),
-    author_id           BIGSERIAL,
-    publisher_id        BIGSERIAL,
-    category_id         BIGSERIAL,
+    publisher_id        BIGINT,
+    category_id         BIGINT,
     CONSTRAINT idx_book_title UNIQUE (title),
     CONSTRAINT idx_book_isbn UNIQUE (isbn),
-    CONSTRAINT fk_book_author_id FOREIGN KEY (author_id) REFERENCES authors (id),
     CONSTRAINT fk_book_publisher_id FOREIGN KEY (publisher_id) REFERENCES publishers (id),
     CONSTRAINT fk_book_category_id FOREIGN KEY (category_id) REFERENCES categories (id)
 );
 
 CREATE TABLE IF NOT EXISTS book_authors
 (
-    book_id   BIGSERIAL NOT NULL,
-    author_id BIGSERIAL NOT NULL,
+    book_id   BIGINT NOT NULL,
+    author_id BIGINT NOT NULL,
     PRIMARY KEY (book_id, author_id),
     FOREIGN KEY (book_id) REFERENCES books (id),
     FOREIGN KEY (author_id) REFERENCES authors (id)
@@ -87,37 +84,37 @@ CREATE TABLE IF NOT EXISTS store_users
     id                BIGSERIAL PRIMARY KEY,
     public_id       uuid NOT NULL,
     status            VARCHAR(50),
-    created_date      TIMESTAMP,
+    created_date      DATE,
     created_by        VARCHAR(255) NOT NULL,
-    updated_date      TIMESTAMP,
+    updated_date      DATE,
     updated_by        VARCHAR(255),
     name              VARCHAR(255) NOT NULL,
     email             VARCHAR(255) NOT NULL UNIQUE,
     address           VARCHAR(255),
-    phone             VARCHAR(20),
+    phone_number             VARCHAR(20),
+    password             VARCHAR(120),
     registration_date DATE
 );
-
 -- Create FavouriteBookData Table if not exists
-CREATE TABLE IF NOT EXISTS favourite_books
+CREATE TABLE IF NOT EXISTS user_favourite_books
 (
-    id           BIGSERIAL PRIMARY KEY,
-    public_id       uuid NOT NULL,
-    created_date TIMESTAMP,
-    created_by   VARCHAR(255) NOT NULL,
-    updated_date TIMESTAMP,
-    updated_by   VARCHAR(255),
-    user_id      BIGINT,
+    id BIGSERIAL PRIMARY KEY,
+    public_id uuid NOT NULL,
+    created_date DATE,
+    created_by VARCHAR(255) NOT NULL,
+    updated_date DATE,
+    updated_by VARCHAR(255),
+    user_id BIGINT,
     CONSTRAINT fk_favourite_book_user_id FOREIGN KEY (user_id) REFERENCES store_users (id)
 );
 
 -- Create Many-to-Many Relationship Table if not exists
-CREATE TABLE IF NOT EXISTS user_favourite_books
+CREATE TABLE IF NOT EXISTS favourite_books
 (
     favourite_id BIGINT NOT NULL,
-    book_id      BIGINT NOT NULL,
+    book_id BIGINT NOT NULL,
     PRIMARY KEY (favourite_id, book_id),
-    FOREIGN KEY (favourite_id) REFERENCES favourite_books (id),
+    FOREIGN KEY (favourite_id) REFERENCES user_favourite_books (id),
     FOREIGN KEY (book_id) REFERENCES books (id)
 );
 
@@ -128,9 +125,9 @@ CREATE TABLE IF NOT EXISTS orders
     public_id       uuid NOT NULL,
     status VARCHAR(50),
     total_amount DECIMAL(10, 2) NOT NULL,
-    created_date TIMESTAMP,
+    created_date DATE,
     created_by VARCHAR(255) NOT NULL,
-    updated_date TIMESTAMP,
+    updated_date DATE,
     updated_by VARCHAR(255),
     order_date DATE NOT NULL,
     user_id BIGINT,
@@ -154,14 +151,13 @@ CREATE TABLE IF NOT EXISTS reviews
     public_id UUID,
     rating INT,
     comment TEXT,
-    review_date TIMESTAMP,
-    created_date TIMESTAMP,
+    review_date DATE,
+    created_date DATE,
     created_by VARCHAR(255) NOT NULL,
-    updated_date TIMESTAMP,
+    updated_date DATE,
     updated_by VARCHAR(255),
     book_id BIGINT,
     user_id BIGINT,
     CONSTRAINT fk_review_book_id FOREIGN KEY (book_id) REFERENCES books (id),
     CONSTRAINT fk_review_user_id FOREIGN KEY (user_id) REFERENCES store_users (id)
 );
-

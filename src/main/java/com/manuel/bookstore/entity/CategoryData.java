@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -12,7 +13,6 @@ import java.util.UUID;
 @Setter
 @ToString
 @Entity
-@MappedSuperclass
 @Table(name = "categories")
 public class CategoryData extends BaseEntity {
 
@@ -24,12 +24,17 @@ public class CategoryData extends BaseEntity {
     private String description;
 
     @OneToMany(mappedBy = "category")
-    private Set<BookData> books;
+    private Set<BookData> books = new HashSet<>();
 
-    public CategoryData() {}
+    public CategoryData() {
+    }
 
     public CategoryData(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public void setBookCategory(BookData book) {
+        this.books.add(book);
     }
 }

@@ -6,14 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
 @ToString
-@MappedSuperclass
-@Table(name = "store_user")
+@Table(name = "store_users")
 public class StoreUserData extends BaseEntity {
 
     @Id
@@ -25,7 +25,7 @@ public class StoreUserData extends BaseEntity {
     private String password;
     private String address;
     private String phoneNumber;
-
+    private LocalDate registrationDate;
     @Enumerated(value = EnumType.STRING)
     private Status status;
 

@@ -12,8 +12,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Entity
 @Table(name = "orders")
-@MappedSuperclass
 public class OrderData extends BaseEntity {
 
     @Id

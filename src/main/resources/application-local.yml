@@ -2,7 +2,7 @@
 server:
     port: 8089
     servlet:
-      context-path: /api/bookstore
+      context-path: /bookstore
 spring:
   datasource:
       url: jdbc:postgresql://localhost:5432/manuel_bookstore

@@ -10,16 +10,13 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
+@MappedSuperclass
 public class BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
-
-    private LocalDate createdDate;
-    private LocalDate updatedDate;
     @Column(nullable = false)
-    private String createdBy;
+    private LocalDate createdDate = LocalDate.now();
+    private LocalDate updatedDate = LocalDate.now();
+    @Column(nullable = false)
+    private String createdBy = "Admin";
     private String updatedBy;
 
 }
