@@ -20,19 +20,21 @@ public class StoreUserData extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private UUID publicId;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private String address;
     private String phoneNumber;
-    private LocalDate registrationDate;
+    private LocalDate registrationDate = LocalDate.now();
     @Enumerated(value = EnumType.STRING)
-    private Status status;
+    private Status status = Status.ACTIVE;
 
     public StoreUserData() {}
 
-    public StoreUserData(String name, String email, String password, String address, String phoneNumber) {
-        this.name = name;
+    public StoreUserData(String firstName, String lastName, String email, String password, String address, String phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.address = address;

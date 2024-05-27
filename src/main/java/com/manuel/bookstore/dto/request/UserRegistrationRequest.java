@@ -8,12 +8,15 @@ import lombok.Data;
 
 
 @Data
-public class StoreUserRequest {
+public class UserRegistrationRequest {
 
     @NotBlank(message = "Name is mandatory")
     @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
-    private String name;
+    private String firstName;
 
+    @NotBlank(message = "Name is mandatory")
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
+    private String lastName;
     @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")
     private String email;
@@ -29,8 +32,9 @@ public class StoreUserRequest {
     @NotBlank(message = "Phone number is mandatory")
     @Pattern(regexp = "^(\\+\\d{1,3})?[\\s.-]?\\d{3,4}[\\s.-]?\\d{3}[\\s.-]?\\d{4}$", message = "Invalid phone number format")
     private String phoneNumber;
-    public StoreUserRequest(String name, String email, String password, String address, String phoneNumber) {
-        this.name = name;
+    public UserRegistrationRequest(String firstName, String lastName, String email, String password, String address, String phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.address = address;

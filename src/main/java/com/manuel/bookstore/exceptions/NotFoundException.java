@@ -1,8 +1,13 @@
 package com.manuel.bookstore.exceptions;
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class NotFoundException extends BookStoreInternalException {
 
     private String message;

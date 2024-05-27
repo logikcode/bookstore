@@ -61,7 +61,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, CONFLICT);
     }
 
-    @ExceptionHandler(InvalidDataException.class)
+    @ExceptionHandler(InvalidDataException .class)
     public ResponseEntity<RestResponse> handleInvalidDataException(BookStoreInternalException ex,  HttpStatusCode status,
                                                                  WebRequest request) {
 
