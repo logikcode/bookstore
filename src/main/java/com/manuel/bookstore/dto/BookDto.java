@@ -23,7 +23,7 @@ public class BookDto {
     @Enumerated(value = EnumType.STRING)
     private BookStatus availabilityStatus;
 
-    private Set<String> authors;
+    private Set<AuthorDto> authors;
 
     private String publisherName;
 

@@ -5,16 +5,21 @@ import com.manuel.bookstore.dto.request.BookRequest;
 import com.manuel.bookstore.entity.AuthorData;
 import com.manuel.bookstore.entity.BookData;
 import com.manuel.bookstore.entity.PublisherData;
+import com.manuel.bookstore.enumeration.BookStatus;
 import com.manuel.bookstore.enumeration.Status;
 import com.manuel.bookstore.exceptions.DuplicateEntryException;
 import com.manuel.bookstore.exceptions.InvalidDataException;
-import com.manuel.bookstore.exceptions.NotFoundExceptionBookStore;
+import com.manuel.bookstore.exceptions.NotFoundException;
 import com.manuel.bookstore.repository.AuthorsRepository;
 import com.manuel.bookstore.repository.BookCategoryRepository;
 import com.manuel.bookstore.repository.BookPublisherRepository;
 import com.manuel.bookstore.repository.BookRepository;
 import com.manuel.bookstore.utils.ObjectMapperUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -49,7 +54,7 @@ public class BookService {
 
         var bookDto = ObjectMapperUtils.map(request, BookDto.class);
         var categoryData = categoryRepository.findCategoryDataByName(bookDto.getCategoryName())
-                .orElseThrow(() -> new NotFoundExceptionBookStore("Please provide valid book category name", false));
+                .orElseThrow(() -> new NotFoundException("Please provide valid book category name", false));
 
         Set<AuthorData> authors = authorsRepository.findAuthorDataByNameIn(request.getAuthorNames());
         authors = !authors.isEmpty() ? authors : getAuthors(request.getAuthorNames());
@@ -80,7 +85,15 @@ public class BookService {
     public BookDto update(BookRequest request, UUID publicId) {
 
         var book = bookRepository.findBookDataByPublicId(publicId)
-                .orElseThrow(() -> new NotFoundExceptionBookStore("No matching book with id " + publicId, false));
+                .orElseThrow(() -> new NotFoundException("No matching book with id " + publicId, false));
+
+        if (StringUtils.isNotBlank(request.getCategoryName()) &&
+                !request.getCategoryName().equalsIgnoreCase(book.getCategory().getName())) {
+
+            var newCategory = categoryRepository.findCategoryDataByName(request.getCategoryName())
+                    .orElseThrow(() -> new NotFoundException("Please provide valid book category name", false));
+            book.setCategory(newCategory);
+        }
 
         Set<String> bookAuthorNames = book.getAuthors().stream()
                 .map(a -> a.getName().toLowerCase())
@@ -89,15 +102,6 @@ public class BookService {
         List<String> filteredAuthorNames = request.getAuthorNames().stream()
                 .filter(requestName -> !bookAuthorNames.contains(requestName.toLowerCase()))
                 .collect(Collectors.toList());
-
-
-        if (StringUtils.isNotBlank(request.getCategoryName()) &&
-                !request.getCategoryName().equalsIgnoreCase(book.getCategory().getName())) {
-
-            var newCategory = categoryRepository.findCategoryDataByName(request.getCategoryName())
-                    .orElseThrow(() -> new NotFoundExceptionBookStore("Please provide valid book category name", false));
-            book.setCategory(newCategory);
-        }
 
         if (!filteredAuthorNames.isEmpty()) {
             Set<AuthorData> newAuthors = getAuthors(filteredAuthorNames).stream()
@@ -122,15 +126,40 @@ public class BookService {
         var savedPublisher = publisherRepository.save(newPublisher);
         book.setPublisher(savedPublisher);
 
-        var bookDto = ObjectMapperUtils.map(bookRepository.save(book), BookDto.class);
-
-        bookDto.setAuthors(book.getAuthors().stream()
-                .map(AuthorData::getName).collect(Collectors.toSet()));
-        return bookDto;
+        return ObjectMapperUtils.map(bookRepository.save(book), BookDto.class);
     }
 
     private PublisherData getPublisher(String publisherName) {
         return publisherRepository.findPublisherDataByName(publisherName).orElseGet(() -> new PublisherData(publisherName));
 
+    }
+
+    public Page<BookDto> getBooks(int page, int size, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return bookRepository.findByAvailabilityStatus(BookStatus.AVAILABLE, pageable).map(this::convertToDto);
+
+    }
+
+    private BookDto convertToDto(BookData book) {
+        return ObjectMapperUtils.map(book, BookDto.class);
+    }
+
+    public BookDto getBooK(UUID publicId) {
+        var book = bookRepository.findBookDataByPublicId(publicId)
+                .orElseThrow(() -> new NotFoundException("No matching book with id " + publicId, false));
+        return ObjectMapperUtils.map(book, BookDto.class);
+    }
+
+    public void delete(UUID publicId) {
+        bookRepository.deleteBookByPublicId(publicId);
+    }
+
+    public BookDto updateBookStatus(UUID publicId, BookStatus status) {
+        bookRepository.updateStatusByPublicId(publicId, status);
+        var book = bookRepository.findBookDataByPublicId(publicId)
+                .orElseThrow(() -> new NotFoundException("No matching book with id " + publicId, false));
+        return ObjectMapperUtils.map(book, BookDto.class);
     }
 }

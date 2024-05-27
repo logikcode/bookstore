@@ -39,7 +39,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
-    @ExceptionHandler(NotFoundExceptionBookStore.class)
+    @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<RestResponse> handleNotFoundException(BookStoreInternalException ex, HttpStatusCode status,
                                                                 WebRequest request) {
 
