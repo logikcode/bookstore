@@ -76,7 +76,26 @@ public class BookData extends BaseEntity{
         setBookAuthor(author);
     }
 
+    public BookData(UUID publicId, String title, String isbn, BigDecimal price, LocalDate publicationDate,
+                    String description, BookStatus availabilityStatus, Set<AuthorData> authors, PublisherData publisher,
+                    CategoryData category) {
+        this.publicId = publicId;
+        this.title = title;
+        this.isbn = isbn;
+        this.price = price;
+        this.publicationDate = publicationDate;
+        this.description = description;
+        this.availabilityStatus = availabilityStatus;
+        this.publisher = publisher;
+        this.category = category;
+        this.authors.addAll(authors);
+    }
+
     public void setBookAuthor(AuthorData author) {
         this.authors.add(author);
+    }
+
+    public void setAuthors(Set<AuthorData> authors){
+        this.authors.addAll(authors);
     }
 }

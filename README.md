@@ -55,17 +55,17 @@ Create a new book
 
 - Request Body Example:
 
-`{
-"title": "Book Title",
-"isbn": "1234567890123",
-"price": 19.99,
-"publication_date": "2024-01-01",
-"description": "Description of the book",
-"availability_status": "Available",
-"author_id": 1,
-"publisher_id": 1,
-"category_id": 1
-}`
+`
+{
+"title": "The Great Gatsby",
+"price": 10.99,
+"description": "A novel written by American author F. Scott Fitzgerald.",
+"availabilityStatus": "AVAILABLE",
+"authorName": "F. Scott Fitzgerald ",
+"publisherName": "Charles Scribner's Sons",
+"categoryName": "Fiction"
+}
+`
 ### Retrieve a book by ID
 
 - GET /books/{id}

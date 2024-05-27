@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class BookRequest {
@@ -21,7 +22,7 @@ public class BookRequest {
     @Enumerated(value = EnumType.STRING)
     private BookStatus availabilityStatus;
 
-    private String authorName;
+    private List<String> authorNames;
 
     private String publisherName;
 

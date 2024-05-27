@@ -32,14 +32,21 @@ public class AuthorData extends BaseEntity {
     @ManyToMany(mappedBy = "authors")
     private Set<BookData> books = new HashSet<>();
 
-    public AuthorData() {}
+    public AuthorData() {
+    }
 
-    public AuthorData(UUID publicId, String name, String biography, LocalDate birthdate, String nationality, Status status) {
-        this.publicId= publicId;
+    public AuthorData(UUID publicId, String name, String biography, String nationality, Status status) {
+        this.publicId = publicId;
         this.name = name;
         this.biography = biography;
-        this.birthdate = birthdate;
         this.nationality = nationality;
         this.status = status;
+    }
+
+    public AuthorData(String name) {
+        this.name = name;
+        this.publicId = UUID.randomUUID();
+        this.biography = "";
+        this.status = Status.ACTIVE;
     }
 }

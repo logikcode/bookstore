@@ -1,11 +1,13 @@
 package com.manuel.bookstore.dto;
 
+import com.manuel.bookstore.entity.AuthorData;
 import com.manuel.bookstore.enumeration.BookStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -21,7 +23,7 @@ public class BookDto {
     @Enumerated(value = EnumType.STRING)
     private BookStatus availabilityStatus;
 
-    private String authorName;
+    private Set<String> authors;
 
     private String publisherName;
 

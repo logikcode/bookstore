@@ -45,5 +45,11 @@ public class PublisherData extends BaseEntity{
     public void setBooks(BookData book){
         this.books.add(book);
     }
+
+    public PublisherData(String name) {
+        this.publicId = UUID.randomUUID();
+        this.name = name;
+        this.publisherStatus = Status.ACTIVE;
+    }
 }
 

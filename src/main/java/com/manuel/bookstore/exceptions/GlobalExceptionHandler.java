@@ -3,7 +3,6 @@ package com.manuel.bookstore.exceptions;
 import com.manuel.bookstore.dto.response.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -11,7 +10,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -52,8 +50,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, NOT_FOUND);
     }
 
-    @ExceptionHandler(DuplicateEntryExceptionBookStore.class)
+    @ExceptionHandler(DuplicateEntryException.class)
     public ResponseEntity<RestResponse> handleDuplicateException(BookStoreInternalException ex,  HttpStatusCode status,
+                                                                 WebRequest request) {
+
+        log.info(ex.getMessage(), ex.isPrintStackTrace() ? ex.getStackTrace() : getStackTrace(ex));
+        var response = new RestResponse(ex.getMessage(), status, ex.getMessage(),
+                request.getDescription(false).substring(4),  Map.of());
+
+        return new ResponseEntity<>(response, CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidDataException.class)
+    public ResponseEntity<RestResponse> handleInvalidDataException(BookStoreInternalException ex,  HttpStatusCode status,
                                                                  WebRequest request) {
 
         log.info(ex.getMessage(), ex.isPrintStackTrace() ? ex.getStackTrace() : getStackTrace(ex));

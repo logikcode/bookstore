@@ -4,10 +4,9 @@ import com.manuel.bookstore.dto.request.BookRequest;
 import com.manuel.bookstore.dto.response.BookResponse;
 import com.manuel.bookstore.service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,5 +19,11 @@ public class BookController {
     public BookResponse create(@RequestBody BookRequest request) {
 
         return BookResponse.fromDto(bookService.create(request));
+    }
+
+    @PutMapping("/edit/{id}")
+    public BookResponse update(@RequestBody BookRequest request, @PathVariable UUID id){
+
+       return BookResponse.fromDto(bookService.update(request, id));
     }
 }
