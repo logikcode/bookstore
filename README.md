@@ -3,11 +3,9 @@
 ## Setup Instructions
 
 ### Prerequisites
-- Java JDK 8 or later installed
+- Java JDK 17 or later installed
 - Apache Maven installed
-- Docker running
-- PostgreSQL database server installed and running
-- docker exec -it shoppy psql -U logikcode -d manuel_bookstore -c "CREATE USER logikcode WITH PASSWORD 'password';"
+- Docker installed & running
 
 ### Steps to Run the Application
 1. Clone the repository:
@@ -16,14 +14,17 @@
 2. Navigate to the project directory
    ```bash
    cd bookstore
-
-3. Build the project using Maven:
+3. Run the docker compose application to create postgresql container for the application datastore
+   ```
+   docker-compose up
+4. Build the project using Maven:
    ```bash
+   cd bookstore
    mvn clean install
-
-4. Run the application:
+   
+5. Run the application:
    ```bash
-   java -jar target/bookstore.jar
+   java -jar target/bookstore-0.0.1-SNAPSHOT.jar
 
 ## Design Explanation
 ### Database Design
@@ -45,14 +46,49 @@ Flyway: For database schema version control and migration.
 API Layer: RESTful APIs to interact with the bookstore data.
 
 ## API Documentation
+### Authentication Endpoints
+### Register User Endpoint
+- http://localhost:8089/bookstore/api/v1/users/register
+- HTTP/ POST
+#### Description: Registers a user to the platform
+  - Request Body Example:
+    ```{
+      "firstName": "Emmanuel",
+      "lastName": "Emmanuel",
+      "email": "emmanuel.admin@gmail.com",
+      "password": "12345678",
+      "address": "Lagos",
+      "phoneNumber": "08012345678"}
+
+
+### Login Endpoint
+- http://localhost:8089/bookstore/api/v1/users/login
+- HTTP/ POST
+#### Description: Login to the platform.
+- Request Body Example:
+  ``` {
+    "email":"emmanuel.admin@gmail.com",
+    "password":"12345678"}
 
 ## Book Endpoints
 
-Create a new book
+### Retrieve existing books
 
-- POST /books
+- HTTP / GET: http://localhost:8089/bookstore/api/v1/books?page=0&size=10&sortField=title&sortDirection=asc
 ##### Description: Add a new book to the database.
+- Prerequisite: <br> Set your Bearer token gotten from login request
+- params:
+    - page: 
+    - size: 
+    - sortField
+    - sortDirection
 
+
+### Create a new book
+
+- HTTP / POST: http://localhost:8089/bookstore/api/v1/books
+##### Description: Add a new book to the database.
+- Prerequisite: Set your Bearer token gotten from login request
 - Request Body Example:
 
 `
@@ -61,96 +97,62 @@ Create a new book
 "price": 10.99,
 "description": "A novel written by American author F. Scott Fitzgerald.",
 "availabilityStatus": "AVAILABLE",
-"authorName": "F. Scott Fitzgerald ",
+"authorNames": ["F. Scott Fitzgerald"],
 "publisherName": "Charles Scribner's Sons",
 "categoryName": "Fiction"
 }
 `
 ### Retrieve a book by ID
 
-- GET /books/{id}
+- HTTP / GET http://localhost:8089/bookstore/api/v1/books/{id}
 
-Description: Fetch a book by its ID.
+- Description: Fetch a book by its ID.
+- Prerequisite: Set your Bearer token gotten from login request
+- Get Request Example:<br>
+  http://localhost:8089/bookstore/api/v1/books/f4b519f6-9e07-4e7c-b2dd-2343b7ace8c2
 
 ### Update a book
 
-- PUT /books/{id}
+- HTTP / PUT : http://localhost:8089/bookstore/api/v1/books/edit/{id}
 
 Description: <br> Update the details of an existing book.
+- Prerequisite: Set your Bearer token gotten from login request
 
 Request Body Example:<br>
 
-`{
-"title": "Updated Book Title",
-"isbn": "1234567890123",
-"price": 25.99,
-"publication_date": "2024-01-01",
-"description": "Updated description of the book",
-"availability_status": "Not Available",
-"author_id": 1,
-"publisher_id": 1,
-"category_id": 1
-}`
+`
+{
+"title": "The Great Gatsby 2nd",
+"price": 19.99,
+"description": "A novel written by American author F. Scott Fitzgerald.",
+"availabilityStatus": "AVAILABLE",
+"authorNames": ["F. Scott Fitzgerald", "Emmanuel O., Sola O."],
+"publisherName": "Charles Scribner's Sons 2nd",
+"categoryName": "Fiction"
+}
+`
+### Update the status of a book
+
+- HTTP / PUT : http://localhost:8089/bookstore/api/v1/books/f4b519f6-9e07-4e7c-b2dd-2343b7ace8c2/status?status=AVAILABLE
+
+Description: <br> Update the status of an existing book.
+- Prerequisite: <br> Set your Bearer token gotten from login request
+
+Request Body Example:<br>
 
 ### Delete a book by ID
+Description: <br> Delete an existing book.
+- Prerequisite: <br> Set your Bearer token gotten from login request
 
-- DELETE /books/{id}
+- HTTP / DELETE: http://localhost:8089/bookstore/api/v1/books/{id}
 
-Description: <br>Remove a book from the database by its ID.
-
-### Store User Endpoints
-#### Retrieve all store users
-
-- GET /users
-
-Description:<br> Fetch all store users from the database.
-
-- Create a new store user. 
-- POST /users
-- Sample Payload:<br>
-`{
-  "name": "User Name",
-  "email": "user@example.com",
-  "address": "123 User Address",
-  "phone": "123-456-7890",
-  "registration_date": "2024-01-01"
-  }
-  `
-Description: <br> Add a new store user to the database.
-Request Body Example:
-
-### Update a store user
-
-- PUT /users/{id}
-
-Description: <br>Update the details of an existing store user.
-
-Request Body Example:<br>
-`{
-  "name": "Updated User Name",
-  "email": "user@example.com",
-  "address": "123 Updated Address",
-  "phone": "987-654-3210",
-  "registration_date": "2024-01-01"
-  }`
+## Book Categories Endpoint
+Description: <br>Retrieve all book categories from data store.
+- HTTP / GET: http://localhost:8089/bookstore/api/v1/categories
+- Prerequisite: <br> Set your Bearer token gotten from login request
 
 
-### Author Endpoints
-GET /authors: Retrieve all authors.
-
-POST /authors: Create a new author.
-
-GET /authors/{id}: Retrieve an author by ID.
-
-PUT /authors/{id}: Update an author.
-
-DELETE /authors/{id}: Delete an author by ID.
-
-
-
-### Favourite Book Endpoints
-GET /users/{userId}/favourites: Retrieve all favorite books for a user.
-
-POST /users/{userId}/favourites: Add a book to a user's favorites list.
-
-DELETE /users/{userId}/favourites/{bookId}: Remove a book from a user's favorites list.
+## Book Authors Endpoint
+Description: <br>Retrieve all book authors from data store.
+- HTTP / GET: http://localhost:8089/bookstore/api/v1/authors
+- Prerequisite: <br> Set your Bearer token gotten from login request
